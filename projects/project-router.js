@@ -6,7 +6,15 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     Projects.find() 
-    .then(projects => res.json(projects))
+    .then(projects => 
+        {
+            const completedProjects = projects.map(project => {
+                if (project.completed === 0) project.completed = false
+                else if (project.completed === 1) project.completed = true
+                return project;
+            })
+            res.status(200).json(completedProjects)
+        })
     .catch(err => res.status(500).json({ message: err }))
 });
 
@@ -33,13 +41,16 @@ router.get('/:id/resources', (req, res) => {
 router.get('/:id/tasks', (req, res) => {
     Projects.findTasks(req.params.id) 
     .then(tasks => {
-        if (tasks) {
-            res.json(tasks)
-            if (task.completed === 1) return 'true'
-            else return 'false'
+        if (tasks.length) {
+            const completedTasks = tasks.map(task => {
+                if (task.completed === 0) task.completed = false
+                else if (task.completed === 1) task.completed = true
+                return task;
+            })
+            res.status(200).json(completedTasks)
         } 
         else {
-            res.json(404).json({ message: 'No such task' })
+            res.status(404).json({ message: 'No such task' })
         }
     })
     .catch(err => res.status(500).json({ message: err }))

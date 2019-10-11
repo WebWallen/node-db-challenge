@@ -3,9 +3,9 @@ exports.up = function(knex) {
     return knex.schema
       .createTable('projects', tbl => {
           tbl.increments(); // unique id
-          tbl.string('name', 255).notNullable();
+          tbl.string('name', 255).notNullable().unique();
           tbl.text('description');
-          tbl.string('completed').notNullable();
+          tbl.boolean('completed').notNullable().defaultTo(0);
       })
   
       .createTable('resources', tbl => {
@@ -39,7 +39,7 @@ exports.up = function(knex) {
           tbl.integer('task_number');
           tbl.string('description', 500).notNullable();
           tbl.text('notes');
-          tbl.string('completed').notNullable;
+          tbl.boolean('completed').notNullable().defaultTo(0);
       })
   };
   
