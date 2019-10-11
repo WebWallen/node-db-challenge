@@ -14,7 +14,7 @@ exports.up = function(knex) {
         tbl
             .integer('project_id')
             .unsigned()
-            .notNullable()
+            // .notNullable()
             .references('id') // this + below = attaches to foreign key
             .inTable('projects') // ^
             .onUpdate('CASCADE')
@@ -41,10 +41,37 @@ exports.up = function(knex) {
           tbl.text('notes');
           tbl.boolean('completed').notNullable().defaultTo(0);
       })
-  };
+
+  .createTableIfNotExists('resources_per_project', tbl => {
+    tbl.increments(); // unique id
+    
+    tbl
+        .integer('project_id')
+        .unsigned()
+        .notNullable()
+        .references('id') // this + below = attaches to foreign key
+        .inTable('projects') // ^
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT');
+
+    tbl 
+        .integer('resource_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('resources')
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT')
+
+    tbl.string('resource_amount', 258).notNullable();
+  })
+
+}
+
   
   exports.down = function(knex) {
     return knex.schema 
+      .dropTableIfExists('resources_per_project')
       .dropTableIfExists('tasks')
       .dropTableIfExists('resources')
       .dropTableIfExists('projects');

@@ -9,7 +9,9 @@ module.exports = {
     addResource,
     addTask,
     update,
-    remove
+    remove,
+    removeResource, 
+    removeTask
 }
 
 function find() {
@@ -65,3 +67,15 @@ function remove(id) {
     .where('id', Number(id))
     .delete();
 };
+
+function removeResource(id) {
+    return db('resources')
+    .where('id', Number(id))
+    .delete();
+}
+
+function removeTask(id) {
+    return db('resources')
+    .where('id', Number(id))
+    .delete();
+}

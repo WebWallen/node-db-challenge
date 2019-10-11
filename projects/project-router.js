@@ -113,4 +113,30 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.status(500).json({ message: err }))
 })
 
+router.delete('/:id/resources/:id', (req, res) => {
+    Projects.findById(req.params.id) 
+    .then(project => {
+        if (project) {
+            Projects.removeResource(req.params.id)
+            .then(deleted => res.json({ removed: deleted }))
+            .catch(err => res.status(500).json({ message: err }))
+        } else {
+            res.status(404).json({ message: 'No such project' })
+        }
+    })
+})
+
+router.delete('/:id/tasks/:id', (req, res) => {
+    Projects.findById(req.params.id) 
+    .then(project => {
+        if (project) {
+            Projects.removeTask(req.params.id)
+            .then(deleted => res.json({ removed: deleted }))
+            .catch(err => res.status(500).json({ message: err }))
+        } else {
+            res.status(404).json({ message: 'No such project' })
+        }
+    })
+})
+
 module.exports = router;
