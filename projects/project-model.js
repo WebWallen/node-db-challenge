@@ -7,7 +7,9 @@ module.exports = {
     findTasks,
     addProject,
     addResource,
-    addTask
+    addTask,
+    update,
+    remove
 }
 
 function find() {
@@ -50,4 +52,16 @@ function addResource(resource, project_id) {
 function addTask(task, project_id) {
     return db('tasks')
     .insert(task, project_id)
+};
+
+function update(changes, id) {
+    return db('projects') 
+        .where('id', Number(id))
+        .update(changes);
+};
+
+function remove(id) {
+    return db('projects')
+    .where('id', Number(id))
+    .delete();
 };
