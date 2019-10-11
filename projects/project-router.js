@@ -45,4 +45,42 @@ router.get('/:id/tasks', (req, res) => {
     .catch(err => res.status(500).json({ message: err }))
 });
 
+router.post('/', (req, res) => {
+    const projectData = req.body;
+
+    Projects.addProject(projectData)
+    .then(project => res.status(201).json(project))
+    .catch(err => res.status(500).json({ message: err }))
+});
+
+router.post('/:id/resources', (req, res) => {
+    const resourceData = req.body;
+
+    Projects.findById(req.params.id) 
+    .then(project => {
+        if (project) {
+            Projects.addResource(resourceData, req.params.id)
+            .then(resource => res.status(201).json(resource))
+        } else {
+            res.status(404).json({ message: 'No such project' })
+        }
+    })
+    .catch(err => res.status(500).json({ message: err }))
+})
+
+router.post('/:id/tasks', (req, res) => {
+    const taskData = req.body;
+
+    Projects.findById(req.params.id) 
+    .then(project => {
+        if (project) {
+            Projects.addTask(taskData, req.params.id)
+            .then(task => res.status(201).json(task))
+        } else {
+            res.status(404).json({ message: 'No such project' })
+        }
+    })
+    .catch(err => res.status(500).json({ message: err }))
+})
+
 module.exports = router;
